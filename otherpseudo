@@ -1,0 +1,419 @@
+#bresenham line drawing 
+
+plotLine(x0,y0, x1,y1)
+  dx = x1 - x0
+  dy = y1 - y0
+  D = 2*dy - dx
+  y = y0
+
+  for x from x0 to x1
+    plot(x,y)
+    if D > 0
+       y = y + 1
+       D = D - 2*dx
+    end if
+    D = D + 2*dy
+    
+
+// C-program for circle drawing 
+// using Bresenham’s Algorithm 
+// in computer-graphics
+#include <stdio.h> 
+#include <dos.h> 
+#include <graphics.h> 
+  
+// Function to put pixels 
+// at subsequence points 
+void drawCircle(int xc, int yc, int x, int y) 
+{ 
+    putpixel(xc+x, yc+y, RED); 
+    putpixel(xc-x, yc+y, RED); 
+    putpixel(xc+x, yc-y, RED); 
+    putpixel(xc-x, yc-y, RED); 
+    putpixel(xc+y, yc+x, RED); 
+    putpixel(xc-y, yc+x, RED); 
+    putpixel(xc+y, yc-x, RED); 
+    putpixel(xc-y, yc-x, RED); 
+} 
+  
+// Function for circle-generation 
+// using Bresenham's algorithm 
+void circleBres(int xc, int yc, int r) 
+{ 
+    int x = 0, y = r; 
+    int d = 3 - 2 * r; 
+    while (y >= x) 
+    { 
+        // for each pixel we will 
+        // draw all eight pixels 
+        drawCircle(xc, yc, x, y); 
+        x++; 
+  
+        // check for decision parameter 
+        // and correspondingly  
+        // update d, x, y 
+        if (d > 0) 
+        { 
+            y--;  
+            d = d + 4 * (x - y) + 10; 
+        } 
+        else
+            d = d + 4 * x + 6; 
+        drawCircle(xc, yc, x, y); 
+        delay(50); 
+    } 
+} 
+
+
+
+// C++ program for implementing 
+// Mid-Point Circle Drawing Algorithm 
+#include<iostream>
+using namespace std; 
+  
+// Implementing Mid-Point Circle Drawing Algorithm 
+void midPointCircleDraw(int x_centre, int y_centre, int r) 
+{ 
+    int x = r, y = 0; 
+      
+    // Printing the initial point on the axes  
+    // after translation 
+    cout << "(" << x + x_centre << ", " << y + y_centre << ") "; 
+      
+    // When radius is zero only a single 
+    // point will be printed 
+    if (r > 0) 
+    { 
+        cout << "(" << x + x_centre << ", " << -y + y_centre << ") "; 
+        cout << "(" << y + x_centre << ", " << x + y_centre << ") "; 
+        cout << "(" << -y + x_centre << ", " << x + y_centre << ")\n"; 
+    } 
+      
+    // Initialising the value of P 
+    int P = 1 - r; 
+    while (x > y) 
+    {  
+        y++; 
+          
+        // Mid-point is inside or on the perimeter 
+        if (P <= 0) 
+            P = P + 2*y + 1; 
+        // Mid-point is outside the perimeter 
+        else
+        { 
+            x--; 
+            P = P + 2*y - 2*x + 1; 
+        } 
+          
+        // All the perimeter points have already been printed 
+        if (x < y) 
+            break; 
+          
+        // Printing the generated point and its reflection 
+        // in the other octants after translation 
+        cout << "(" << x + x_centre << ", " << y + y_centre << ") "; 
+        cout << "(" << -x + x_centre << ", " << y + y_centre << ") "; 
+        cout << "(" << x + x_centre << ", " << -y + y_centre << ") "; 
+        cout << "(" << -x + x_centre << ", " << -y + y_centre << ")\n"; 
+          
+        // If the generated point is on the line x = y then  
+        // the perimeter points have already been printed 
+        if (x != y) 
+        { 
+            cout << "(" << y + x_centre << ", " << x + y_centre << ") "; 
+            cout << "(" << -y + x_centre << ", " << x + y_centre << ") "; 
+            cout << "(" << y + x_centre << ", " << -x + y_centre << ") "; 
+            cout << "(" << -y + x_centre << ", " << -x + y_centre << ")\n"; 
+        } 
+    } 
+} 
+  
+// Driver code 
+int main() 
+{ 
+    // To draw a circle of radius 3 centred at (0, 0) 
+    midPointCircleDraw(0, 0, 3); 
+    return 0; 
+} 
+
+  
+  
+// driver function 
+int main() 
+{ 
+    int xc = 50, yc = 50, r2 = 30; 
+    int gd = DETECT, gm; 
+    initgraph(&gd, &gm, "");  // initialize graph 
+    circleBres(xc, yc, r);    // function call 
+    return 0; 
+} 
+
+
+/*
+    Creates edge buckets from the given edges
+ 
+    @param n    Number of vertices
+    @param x[]  array of x points
+    @param y[]  array of y points
+ 
+    @return     List of edge buckets
+ */
+createEdges(n, x[], y[]) {
+    instantiate a new edge table
+
+   loop through x[] & y[] pairs {
+        if the edge's slope is NOT undefined (verticle) {
+            create bucket with edge
+            add bucket to edge table
+        }
+    }
+}
+
+/*
+    Given the edge table of the polygon, fill the polygons
+ 
+    @param edgeTable The polygon's edge table representation
+ */
+processEdgeTable (edgeTable) {
+    while (edge table is NOT empty) {
+
+// Remove edges from the active list if y == ymax
+        if (active list is NOT empty) {
+            for (iterate through all buckets in the active list) {
+                if (current bucket's ymax == current scanline) {
+                    remove bucket from active list
+                    remove bucket from edge table
+                }
+            }
+        }
+
+// Add edge from edge table to active list if y == ymin
+        for (iterate through the bucket in the edge table) {
+            if (bucket's ymin == scanline) {
+                add bucket to active list
+            }
+        }
+
+// Sort active list by x position and slope
+        sortTheActiveList();
+
+// Fill the polygon pixel
+        for (iterate through the active list) {
+            for (from vertex1.x to vertex2.x of the bucket) {
+                setPixelColor()
+            }
+        }
+
+// Increment X variables of buckets based on the slope
+        for (all buckets in the active list) {
+            if (bucketsdX != 0) {
+                bucket's sum += bucket's dX
+
+       while (bucket's sum >= bucket's dY) {
+            increment or decrement bucket's X depending on sign of   bucket's slope
+            edge's sum -= dY
+                }
+            }
+        }
+    }
+}
+
+///
+// Draw a filled polygon in the Canvas C.
+//
+// The polygon has n distinct vertices.  The coordinates of the vertices
+// making up the polygon are stored in the x and y arrays.  The ith
+// vertex will have coordinate (x[i],y[i]).
+//
+// @param n - number of vertices
+// @param x - x coordinates
+// @param y - y coordinates
+///
+drawPolygon(n, x[], y[]) {
+    // Create edge table
+    finalEdgeTable = createEdges()
+
+// Sort edges by minY
+    sort(finalEdgeTable)
+
+processEdgeTable(finalEdgeTable)
+}
+
+Header file with structs
+
+/*
+    Bucket struct to hold edge information
+ */
+struct Bucket {
+    int yMax;
+    int yMin;
+    int x;
+    int sign;
+    int dX;
+    int dY;
+    double sum;
+};
+
+/*
+    Vertex struct to hold x and y values
+ */
+struct Vertex {
+    int x;
+    int y;
+};
+
+
+
+// C++ program for implementing Sutherland–Hodgman 
+// algorithm for polygon clipping 
+#include<iostream> 
+using namespace std; 
+  
+const int MAX_POINTS = 20; 
+  
+// Returns x-value of point of intersectipn of two 
+// lines 
+int x_intersect(int x1, int y1, int x2, int y2, 
+                int x3, int y3, int x4, int y4) 
+{ 
+    int num = (x1*y2 - y1*x2) * (x3-x4) - 
+              (x1-x2) * (x3*y4 - y3*x4); 
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4); 
+    return num/den; 
+} 
+  
+// Returns y-value of point of intersectipn of 
+// two lines 
+int y_intersect(int x1, int y1, int x2, int y2, 
+                int x3, int y3, int x4, int y4) 
+{ 
+    int num = (x1*y2 - y1*x2) * (y3-y4) - 
+              (y1-y2) * (x3*y4 - y3*x4); 
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4); 
+    return num/den; 
+} 
+  
+// This functions clips all the edges w.r.t one clip 
+// edge of clipping area 
+void clip(int poly_points[][2], int &poly_size, 
+          int x1, int y1, int x2, int y2) 
+{ 
+    int new_points[MAX_POINTS][2], new_poly_size = 0; 
+  
+    // (ix,iy),(kx,ky) are the co-ordinate values of 
+    // the points 
+    for (int i = 0; i < poly_size; i++) 
+    { 
+        // i and k form a line in polygon 
+        int k = (i+1) % poly_size; 
+        int ix = poly_points[i][0], iy = poly_points[i][1]; 
+        int kx = poly_points[k][0], ky = poly_points[k][1]; 
+  
+        // Calculating position of first point 
+        // w.r.t. clipper line 
+        int i_pos = (x2-x1) * (iy-y1) - (y2-y1) * (ix-x1); 
+  
+        // Calculating position of second point 
+        // w.r.t. clipper line 
+        int k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1); 
+  
+        // Case 1 : When both points are inside 
+        if (i_pos < 0  && k_pos < 0) 
+        { 
+            //Only second point is added 
+            new_points[new_poly_size][0] = kx; 
+            new_points[new_poly_size][1] = ky; 
+            new_poly_size++; 
+        } 
+  
+        // Case 2: When only first point is outside 
+        else if (i_pos >= 0  && k_pos < 0) 
+        { 
+            // Point of intersection with edge 
+            // and the second point is added 
+            new_points[new_poly_size][0] = x_intersect(x1, 
+                              y1, x2, y2, ix, iy, kx, ky); 
+            new_points[new_poly_size][1] = y_intersect(x1, 
+                              y1, x2, y2, ix, iy, kx, ky); 
+            new_poly_size++; 
+  
+            new_points[new_poly_size][0] = kx; 
+            new_points[new_poly_size][1] = ky; 
+            new_poly_size++; 
+        } 
+  
+        // Case 3: When only second point is outside 
+        else if (i_pos < 0  && k_pos >= 0) 
+        { 
+            //Only point of intersection with edge is added 
+            new_points[new_poly_size][0] = x_intersect(x1, 
+                              y1, x2, y2, ix, iy, kx, ky); 
+            new_points[new_poly_size][1] = y_intersect(x1, 
+                              y1, x2, y2, ix, iy, kx, ky); 
+            new_poly_size++; 
+        } 
+  
+        // Case 4: When both points are outside 
+        else
+        { 
+            //No points are added 
+        } 
+    } 
+  
+    // Copying new points into original array 
+    // and changing the no. of vertices 
+    poly_size = new_poly_size; 
+    for (int i = 0; i < poly_size; i++) 
+    { 
+        poly_points[i][0] = new_points[i][0]; 
+        poly_points[i][1] = new_points[i][1]; 
+    } 
+} 
+  
+// Implements Sutherland–Hodgman algorithm 
+void suthHodgClip(int poly_points[][2], int poly_size, 
+                  int clipper_points[][2], int clipper_size) 
+{ 
+    //i and k are two consecutive indexes 
+    for (int i=0; i<clipper_size; i++) 
+    { 
+        int k = (i+1) % clipper_size; 
+  
+        // We pass the current array of vertices, it's size 
+        // and the end points of the selected clipper line 
+        clip(poly_points, poly_size, clipper_points[i][0], 
+             clipper_points[i][1], clipper_points[k][0], 
+             clipper_points[k][1]); 
+    } 
+  
+    // Printing vertices of clipped polygon 
+    for (int i=0; i < poly_size; i++) 
+        cout << '(' << poly_points[i][0] << 
+                ", " << poly_points[i][1] << ") "; 
+} 
+  
+//Driver code 
+int main() 
+{ 
+    // Defining polygon vertices in clockwise order 
+    int poly_size = 3; 
+    int poly_points[20][2] = {{100,150}, {200,250}, 
+                              {300,200}}; 
+  
+    // Defining clipper polygon vertices in clockwise order 
+    // 1st Example with square clipper 
+    int clipper_size = 4; 
+    int clipper_points[][2] = {{150,150}, {150,200}, 
+                              {200,200}, {200,150} }; 
+  
+    // 2nd Example with triangle clipper 
+    /*int clipper_size = 3; 
+    int clipper_points[][2] = {{100,300}, {300,300}, 
+                                {200,100}};*/
+  
+    //Calling the clipping function 
+    suthHodgClip(poly_points, poly_size, clipper_points, 
+                 clipper_size); 
+  
+    return 0; 
+} 
